@@ -161,6 +161,26 @@ class Mongo(DataLayer):
             # update will actually succeed (a new ETag will be needed).
             abort(500)
 
+    def get_next_sequence(self, resource):
+        """Inserts a document into a resource collection.
+
+        .. versionchanged:: 0.0.8
+           'write_concern' support.
+
+        """
+        counter_name = resource + '_id'
+        try:
+            counter = self.driver.db["counters"].find_and_modify(query={'_id': counter_name},
+                                                              update={'$inc': {'seq': 1}},
+                                                              new=True)
+            return str(int(counter['seq']))
+
+        except pymongo.errors.OperationFailure:
+            # most likely a 'w' (write_concern) setting which needs an
+            # existing ReplicaSet which doesn't exist. Please note that the
+            # update will actually succeed (a new ETag will be needed).
+            abort(500)
+
     def update(self, resource, id_, updates):
         """Updates a collection document.
 

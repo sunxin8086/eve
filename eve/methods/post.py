@@ -101,6 +101,9 @@ def post(resource):
         issues.append(doc_issues)
 
         if len(doc_issues) == 0:
+            if True:
+                if '_id' not in document:
+                    document['_id'] = app.data.get_next_sequence(resource)
             documents.append(document)
 
     if len(documents):

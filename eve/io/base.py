@@ -114,6 +114,18 @@ class DataLayer(object):
         """
         raise NotImplementedError
 
+    def get_next_sequence(self, resource):
+        """Get the next sequence for a resource that uses auto-incrementing integer as the id.
+
+        :param resource: resource being accessed. You should then use
+                         the ``_datasource`` helper function to retrieve both
+                         the actual datasource name.
+
+        .. versionchanged:: 0.0.x
+            Added to support collection that doesn't use ObjectId as the unique identifier
+        """
+        raise NotImplementedError
+
     def update(self, resource, id_, updates):
         """Updates a collection/table document/row.
         :param resource: resource being accessed. You should then use
